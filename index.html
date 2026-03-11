@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Graziel S C — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <link rel="shortcut icon" href="icon/favicon_io/favicon-16x16.png" type="image/x-icon">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --blue-deep:    #050d1a;
+      --blue-dark:    #091628;
+      --blue-mid:     #0a2a5e;
+      --blue-bright:  #1d6fe8;
+      --blue-glow:    #3d9bff;
+      --blue-pale:    #7dc4ff;
+      --blue-light:   #c8e6ff;
+      --white:        #f0f6ff;
+      --accent:       #00e5ff;
+    }
+
+    html { scroll-behavior: smooth; }
+    
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--blue-deep);
+      color: var(--white);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ─── Custom Cursor ─── */
+    #cursor {
+      position: fixed; width: 12px; height: 12px;
+      background: var(--accent); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s ease, width 0.2s, height 0.2s, opacity 0.2s;
+      mix-blend-mode: screen;
+    }
+    #cursor-ring {
+      position: fixed; width: 36px; height: 36px;
+      border: 1.5px solid rgba(61,155,255,0.5);
+      border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.3s, height 0.3s, opacity 0.3s;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: linear-gradient(to bottom, rgba(5,13,26,0.95), transparent);
+      backdrop-filter: blur(4px);
+    }
+    .nav-logo {
+      font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--blue-pale), var(--accent));
+      background-clip: text; -webkit-text-fill-color: transparent; 
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--blue-pale); text-decoration: none;
+      font-size: 0.9rem; letter-spacing: 0.08em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ─── PAGE SECTIONS ─── */
+    .page { min-height: 100vh; position: relative; }
+
+    /* ─── WELCOME PAGE ─── */
+    #welcome {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, #0d2a5a 0%, var(--blue-deep) 70%);
+      overflow: hidden;
+    }
+
+    /* Molecule Canvas */
+    #mol-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+    }
+
+    .welcome-content {
+      position: relative; z-index: 10;
+      text-align: center;
+    }
+    .welcome-tag {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem; letter-spacing: 0.18em;
+      color: var(--accent);
+      border: 1px solid rgba(0,229,255,0.25);
+      padding: 0.4rem 1.1rem; border-radius: 100px;
+      margin-bottom: 1.8rem;
+      background: rgba(0,229,255,0.06);
+      animation: fadeDown 0.8s ease both;
+    }
+    .welcome-title {
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: 800; line-height: 1.05;
+      letter-spacing: -0.04em;
+      animation: fadeUp 0.9s 0.1s ease both;
+    }
+    .welcome-title span {
+      background: linear-gradient(135deg, var(--blue-glow) 0%, var(--accent) 60%);
+      background-clip:text; -webkit-text-fill-color: transparent;
+    }
+    .welcome-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 1rem; color: var(--blue-pale);
+      margin-top: 1.2rem; letter-spacing: 0.04em;
+      animation: fadeUp 0.9s 0.2s ease both;
+    }
+    .welcome-cta {
+      margin-top: 2.8rem;
+      display: inline-block; padding: 0.85rem 2.4rem;
+      background: linear-gradient(135deg, var(--blue-bright), var(--accent));
+      color: var(--blue-deep); font-weight: 700;
+      font-size: 0.95rem; border-radius: 6px;
+      text-decoration: none; letter-spacing: 0.05em;
+      box-shadow: 0 0 30px rgba(0,229,255,0.25);
+      animation: fadeUp 0.9s 0.35s ease both;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .welcome-cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 50px rgba(0,229,255,0.45);
+    }
+
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      opacity: 0.4; font-family: 'DM Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.15em;
+      color: var(--blue-pale);
+      animation: pulse 2.5s infinite;
+    }
+    .scroll-hint::after {
+      content: ''; display: block; width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--blue-pale), transparent);
+    }
+
+    /* ─── PORTFOLIO PAGE ─── */
+    #portfolio {
+      background: linear-gradient(180deg, var(--blue-dark) 0%, var(--blue-deep) 100%);
+      padding: 8rem 4rem 6rem;
+    }
+
+    .section-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem; letter-spacing: 0.2em;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800; letter-spacing: -0.03em;
+      margin-bottom: 3.5rem;
+      line-height: 1.1;
+    }
+    .section-title em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--blue-glow), var(--accent));
+      background-clip:text; -webkit-text-fill-color: transparent;
+    }
+
+    /* About */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center; margin-bottom: 7rem;
+    }
+    .about-text p {
+      font-size: 1.05rem; line-height: 1.8;
+      color: rgba(200,230,255,0.75);
+      margin-bottom: 1rem;
+    }
+    .about-text p strong { color: var(--accent); font-weight: 600; }
+    .about-visual {
+      position: relative; display: flex;
+      align-items: center; justify-content: center;
+    }
+    .avatar-ring {
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue-mid), var(--blue-glow));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem; box-shadow: 0 0 60px rgba(29,111,232,0.35);
+      position: relative;
+    }
+    .avatar-ring::before {
+      content: '';
+      position: absolute; inset: -4px; border-radius: 50%;
+      background: conic-gradient(var(--accent) 0deg, transparent 200deg, var(--blue-bright) 360deg);
+      z-index: -1; animation: spin 8s linear infinite;
+    }
+
+    /* Skills */
+    .skills-section { margin-bottom: 7rem; }
+    .skills-groups {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .skill-group {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(61,155,255,0.1);
+      border-radius: 16px; padding: 2rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .skill-group:hover {
+      border-color: rgba(0,229,255,0.25);
+      box-shadow: 0 0 30px rgba(0,229,255,0.06);
+    }
+    .skill-group-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.2em;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 1.4rem;
+    }
+    .skill-item { margin-bottom: 1.2rem; }
+    .skill-name {
+      display: flex; justify-content: space-between;
+      font-size: 0.88rem; color: var(--blue-light);
+      margin-bottom: 0.45rem;
+    }
+    .skill-bar {
+      height: 4px; background: rgba(255,255,255,0.07);
+      border-radius: 2px; overflow: hidden;
+    }
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue-bright), var(--accent));
+      border-radius: 2px;
+      animation: growBar 1.2s ease both;
+      transform-origin: left;
+    }
+    @keyframes growBar {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+
+    /* Projects */
+    .projects-section { margin-bottom: 7rem; }
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(61,155,255,0.1);
+      border-radius: 16px; padding: 2rem;
+      position: relative; overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .project-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0,229,255,0.3);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(0,229,255,0.08);
+    }
+    .project-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .project-card:hover::before { opacity: 1; }
+    .project-icon {
+      font-size: 2.2rem; margin-bottom: 1.2rem;
+    }
+    .project-title {
+      font-size: 1.05rem; font-weight: 700;
+      margin-bottom: 0.6rem; color: var(--white);
+    }
+    .project-desc {
+      font-size: 0.85rem; line-height: 1.7;
+      color: rgba(200,230,255,0.6);
+      margin-bottom: 1.4rem;
+    }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem; padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      background: rgba(29,111,232,0.15);
+      color: var(--blue-pale);
+      border: 1px solid rgba(29,111,232,0.25);
+    }
+
+    /* Contact */
+    .contact-section {
+      border-top: 1px solid rgba(61,155,255,0.1);
+      padding-top: 5rem; text-align: center;
+    }
+    .contact-text {
+      font-size: 1rem; color: rgba(200,230,255,0.6);
+      margin-bottom: 2.5rem; max-width: 480px; margin-inline: auto;
+      line-height: 1.7;
+    }
+    .contact-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .contact-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.75rem 1.8rem;
+      border: 1px solid rgba(61,155,255,0.3);
+      border-radius: 8px; color: var(--blue-pale);
+      text-decoration: none; font-size: 0.88rem;
+      transition: all 0.25s; background: rgba(255,255,255,0.03);
+    }
+    .contact-btn:hover {
+      background: rgba(0,229,255,0.08);
+      border-color: var(--accent); color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center; padding: 2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem; color: rgba(200,230,255,0.2);
+      letter-spacing: 0.12em;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes pulse    { 0%,100% { opacity:.4; } 50% { opacity:.7; } }
+    @keyframes spin     { to { transform: rotate(360deg); } }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 2rem; }
+      #portfolio { padding: 6rem 2rem 4rem; }
+      .about-grid, .skills-groups { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">GS</div>
+  <ul class="nav-links">
+    <li><a href="#welcome">Início</a></li>
+    <li><a href="#portfolio">Portfólio</a></li>
+    <li><a href="#contact">Contato</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════ WELCOME PAGE ══════════════ -->
+<section class="page" id="welcome">
+  <canvas id="mol-canvas"></canvas>
+
+  <div class="welcome-content">
+    <div class="welcome-tag">✦ Seja muito bem-vindo</div>
+    <h1 class="welcome-title">
+      Olá, eu sou<br/><span>Graziel S</span>
+    </h1>
+    <p class="welcome-sub">// Desenvolvedor Front-end &amp; Back-end em formação</p>
+    <a href="#portfolio" class="welcome-cta">Ver Portfólio →</a>
+  </div>
+
+  <div class="scroll-hint">scroll</div>
+</section>
+
+<!-- ══════════════ PORTFOLIO PAGE ══════════════ -->
+<section class="page" id="portfolio">
+
+  <!-- About -->
+  <div class="about-grid">
+    <div class="about-text">
+      <p class="section-eyebrow">sobre mim</p>
+      <h2 class="section-title">Construindo o <em>futuro digital</em> com código</h2>
+      <p>Oi! Sou o <strong>Graziel</strong>, um desenvolvedor apaixonado por tecnologia e em constante aprendizado. Estudo desenvolvimento web com foco em criar experiências bonitas no front-end e sistemas robustos no back-end.</p>
+      <p>Acredito que bom código vai além de funcionar — ele precisa ser legível, eficiente e fazer sentido para quem o usa.</p>
+    </div>
+    <div class="about-visual">
+      <div class="avatar-ring">👨‍💻</div>
+    </div>
+  </div>
+
+  <!-- Skills -->
+  <div class="skills-section">
+    <p class="section-eyebrow">habilidades</p>
+    <h2 class="section-title">Minha stack <em>tecnológica</em></h2>
+    <div class="skills-groups">
+
+      <div class="skill-group">
+        <div class="skill-group-label">⚡ Front-end</div>
+
+        <div class="skill-item">
+          <div class="skill-name"><span>HTML5 / CSS3</span><span>80%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>JavaScript</span><span>65%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Responsividade</span><span>75%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>UI Design / Figma</span><span>55%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:55%"></div></div>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-label">🔧 Back-end</div>
+
+        <div class="skill-item">
+          <div class="skill-name"><span>Python</span><span>70%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Java</span><span>60%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Lógica de Programação</span><span>78%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:78%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Git &amp; Versionamento</span><span>62%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:62%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Projects -->
+  <div class="projects-section">
+    <p class="section-eyebrow">projetos</p>
+    <h2 class="section-title">O que estou <em>construindo</em></h2>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-icon">🎨</div>
+        <div class="project-title">Landing Page Responsiva</div>
+        <div class="project-desc">Página web estática com design moderno, animações CSS e layout totalmente responsivo para mobile e desktop.</div>
+        <div class="project-tags">
+          <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🐍</div>
+        <div class="project-title">Sistema em Python</div>
+        <div class="project-desc">Aplicação back-end desenvolvida em Python com foco em lógica de programação, manipulação de dados e estruturas.</div>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">POO</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">☕</div>
+        <div class="project-title">Projeto Java</div>
+        <div class="project-desc">Implementação de conceitos de orientação a objetos, herança, polimorfismo e design patterns com Java.</div>
+        <div class="project-tags">
+          <span class="tag">Java</span><span class="tag">POO</span><span class="tag">OOP</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">📋</div>
+        <div class="project-title">To-Do App</div>
+        <div class="project-desc">Aplicativo de lista de tarefas com manipulação do DOM, eventos JavaScript e armazenamento local.</div>
+        <div class="project-tags">
+          <span class="tag">JavaScript</span><span class="tag">DOM</span><span class="tag">CSS</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🔢</div>
+        <div class="project-title">Calculadora Web</div>
+        <div class="project-desc">Calculadora interativa com JavaScript puro, lógica de operações e interface desenvolvida com HTML e CSS.</div>
+        <div class="project-tags">
+          <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🚀</div>
+        <div class="project-title">Em Desenvolvimento...</div>
+        <div class="project-desc">Novos projetos sendo construídos enquanto evoluo nas minhas habilidades. Fique de olho!</div>
+        <div class="project-tags">
+          <span class="tag">Em breve</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div class="contact-section" id="contact">
+    <p class="section-eyebrow">contato</p>
+    <h2 class="section-title">Vamos <em>conversar?</em></h2>
+    <p class="contact-text">Estou aberto a oportunidades, colaborações e aprendizados. Se quiser bater um papo sobre tecnologia, me manda uma mensagem!</p>
+    <div class="contact-links">
+      <a href="#" class="contact-btn">✉️ Email</a>
+      <a href="#" class="contact-btn">💼 LinkedIn</a>
+      <a href="#" class="contact-btn">🐙 GitHub</a>
+    </div>
+  </div>
+
+</section>
+
+<footer>© 2025 Graziel S — Feito com 💙 e muito código</footer>
+
+<script>
+  // ─── Custom Cursor ───
+  const cur = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  (function animCursor() {
+    cur.style.left  = mx + 'px'; cur.style.top  = my + 'px';
+    rx += (mx - rx) * 0.12;     ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  })();
+  document.querySelectorAll('a, button, .project-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cur.style.width = '20px'; cur.style.height = '20px';
+      ring.style.width = '56px'; ring.style.height = '56px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cur.style.width = '12px'; cur.style.height = '12px';
+      ring.style.width = '36px'; ring.style.height = '36px';
+    });
+  });
+
+  // ─── Molecule / Atom Network ───
+  const canvas = document.getElementById('mol-canvas');
+  const ctx    = canvas.getContext('2d');
+
+  let W, H, nodes, mouse = { x: -999, y: -999 };
+
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+    buildNodes();
+  }
+
+  function buildNodes() {
+    const count = Math.floor((W * H) / 12000);
+    nodes = [];
+    for (let i = 0; i < count; i++) {
+      nodes.push({
+        x:  Math.random() * W,
+        y:  Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r:  Math.random() * 2.5 + 1.5,
+        hue: 200 + Math.random() * 30,
+      });
+    }
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+  canvas.addEventListener('mouseleave', () => { mouse.x = -999; mouse.y = -999; });
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const LINK_DIST  = 110;
+    const MOUSE_DIST = 160;
+    const REPEL      = 90;
+
+    // Update + repel from mouse
+    nodes.forEach(n => {
+      const dx = n.x - mouse.x;
+      const dy = n.y - mouse.y;
+      const d  = Math.sqrt(dx*dx + dy*dy);
+      if (d < REPEL && d > 0) {
+        const f = (REPEL - d) / REPEL;
+        n.vx += (dx/d) * f * 1.4;
+        n.vy += (dy/d) * f * 1.4;
+      }
+      n.vx *= 0.985; n.vy *= 0.985;
+      n.x  += n.vx;  n.y  += n.vy;
+      if (n.x < 0)  { n.x = 0;  n.vx *= -1; }
+      if (n.x > W)  { n.x = W;  n.vx *= -1; }
+      if (n.y < 0)  { n.y = 0;  n.vy *= -1; }
+      if (n.y > H)  { n.y = H;  n.vy *= -1; }
+    });
+
+    // Edges
+    for (let i = 0; i < nodes.length; i++) {
+      const a = nodes[i];
+      for (let j = i+1; j < nodes.length; j++) {
+        const b  = nodes[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const d  = Math.sqrt(dx*dx + dy*dy);
+        if (d < LINK_DIST) {
+          // near mouse → brighter
+          const mdA = Math.hypot(a.x-mouse.x, a.y-mouse.y);
+          const mdB = Math.hypot(b.x-mouse.x, b.y-mouse.y);
+          const nearMouse = Math.min(mdA, mdB) < MOUSE_DIST;
+          const alpha = nearMouse
+            ? (1 - d/LINK_DIST) * 0.85
+            : (1 - d/LINK_DIST) * 0.18;
+          const color = nearMouse ? `rgba(0,229,255,${alpha})` : `rgba(61,155,255,${alpha})`;
+          ctx.beginPath();
+          ctx.strokeStyle = color;
+          ctx.lineWidth = nearMouse ? 1.2 : 0.7;
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+
+      // Nodes
+      const mdN = Math.hypot(a.x-mouse.x, a.y-mouse.y);
+      const nearN = mdN < MOUSE_DIST;
+      const glowR = nearN ? a.r * 2.8 : a.r;
+      const alpha = nearN ? 0.95 : 0.45;
+
+      if (nearN) {
+        const grd = ctx.createRadialGradient(a.x, a.y, 0, a.x, a.y, glowR * 3);
+        grd.addColorStop(0, `rgba(0,229,255,0.35)`);
+        grd.addColorStop(1, `rgba(0,229,255,0)`);
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, glowR * 3, 0, Math.PI*2);
+        ctx.fillStyle = grd;
+        ctx.fill();
+      }
+
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, glowR, 0, Math.PI*2);
+      ctx.fillStyle = nearN
+        ? `rgba(0,229,255,${alpha})`
+        : `rgba(${nearN?'100,200,255':'61,155,255'},${alpha})`;
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  draw();
+</script>
+</body>
+</html>
